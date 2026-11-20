@@ -1,0 +1,2745 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Dudh Hisab • दूध हिसाब</title>
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="100% Offline Dudh Hisab, Payment Register & Calculator App" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dudh Hisab" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --card-soft: #f8fafc;
+      --navy: #0f172a;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --blue-border: #bfdbfe;
+      --green: #059669;
+      --green-soft: #ecfdf5;
+      --green-border: #a7f3d0;
+      --amber: #b45309;
+      --amber-soft: #fffbeb;
+      --amber-border: #fde68a;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
+      --red-border: #fecaca;
+      --text: #0f172a;
+      --text-2: #334155;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --input-bg: #f8fafc;
+      --input-border: #cbd5e1;
+      --radius: 16px;
+      --shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    }
+
+    body.dark {
+      --bg: #020617;
+      --card: #0f172a;
+      --card-soft: #1e293b;
+      --navy: #f8fafc;
+      --blue: #60a5fa;
+      --blue-soft: rgba(59, 130, 246, 0.16);
+      --blue-border: rgba(59, 130, 246, 0.35);
+      --green: #34d399;
+      --green-soft: rgba(16, 185, 129, 0.14);
+      --green-border: rgba(16, 185, 129, 0.35);
+      --amber: #fbbf24;
+      --amber-soft: rgba(245, 158, 11, 0.14);
+      --amber-border: rgba(245, 158, 11, 0.35);
+      --red: #f87171;
+      --red-soft: rgba(239, 68, 68, 0.14);
+      --red-border: rgba(239, 68, 68, 0.35);
+      --text: #f8fafc;
+      --text-2: #cbd5e1;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --input-bg: #1e293b;
+      --input-border: #334155;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: calc(84px + env(safe-area-inset-bottom));
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* Header */
+    .app-header {
+      background: linear-gradient(135deg, #090f24 0%, #172554 55%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: calc(12px + env(safe-area-inset-top)) 14px 13px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 16px rgba(2, 6, 23, 0.35);
+    }
+
+    .header-row {
+      max-width: 540px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .rate-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .rate-pill .edit-tag {
+      background: #10b981;
+      color: #022c22;
+      font-size: 9.5px;
+      font-weight: 900;
+      padding: 2px 5px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    /* Layout Container */
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 13px;
+    }
+
+    /* Install Banner */
+    .install-banner {
+      display: none;
+      background: linear-gradient(135deg, #065f46, #047857);
+      color: #ffffff;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .install-banner.show {
+      display: flex;
+    }
+
+    .install-banner-text {
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+
+    .install-banner-text strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .btn-install {
+      background: #ffffff;
+      color: #065f46;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Backup Reminder Strip */
+    .backup-alert {
+      display: none;
+      background: var(--amber-soft);
+      border: 1px solid var(--amber-border);
+      color: var(--amber);
+      border-radius: 13px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .backup-alert.show {
+      display: flex;
+    }
+
+    .backup-alert button {
+      background: var(--amber);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 15px;
+      margin-bottom: 13px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-strip {
+      background: linear-gradient(135deg, var(--green-soft) 0%, var(--blue-soft) 100%);
+      border: 1px solid var(--blue-border);
+      border-radius: var(--radius);
+      padding: 13px 15px;
+      margin-bottom: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .summary-strip-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .summary-strip-milk {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 2px;
+    }
+
+    .summary-strip-today {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .summary-strip-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .summary-strip-money {
+      font-size: 21px;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1.1;
+    }
+
+    .summary-strip-link {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue);
+      margin-top: 3px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .badge-rate {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      padding: 4px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* Form Controls */
+    .field {
+      margin-bottom: 13px;
+    }
+
+    .field-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text-2);
+    }
+
+    .day-hint {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .date-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="date"],
+    input[type="number"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1.5px solid var(--input-border);
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--input-bg);
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .btn-today {
+      padding: 0 15px;
+      border-radius: 12px;
+      border: 1.5px solid var(--input-border);
+      background: var(--card-soft);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 13.5px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Shift Buttons */
+    .shift-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .shift-btn {
+      padding: 10px 6px;
+      border-radius: 11px;
+      border: 1.5px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text-2);
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .shift-btn.active {
+      background: #1d4ed8;
+      color: #ffffff;
+      border-color: #1d4ed8;
+    }
+
+    /* Quantity Grid */
+    .qty-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .qty-box {
+      position: relative;
+    }
+
+    .qty-box input {
+      padding-right: 48px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .qty-unit {
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    /* Quick Chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .chip {
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--input-border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .chip:active {
+      background: var(--blue-soft);
+      border-color: var(--blue);
+    }
+
+    .chip.repeat-chip {
+      color: var(--blue);
+      border-color: var(--blue-border);
+      background: var(--blue-soft);
+    }
+
+    .chip.clear-chip {
+      color: var(--red);
+      border-color: var(--red-border);
+      background: var(--red-soft);
+    }
+
+    /* Edit Rate Field (shown only while editing entry) */
+    .edit-rate-wrap {
+      display: none;
+      background: var(--amber-soft);
+      border: 1px solid var(--amber-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 13px;
+    }
+
+    .edit-rate-wrap.show {
+      display: block;
+    }
+
+    .edit-rate-wrap label {
+      color: var(--amber);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    /* Live Calculation Box */
+    .live-calc {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+      border-radius: 14px;
+      padding: 13px 15px;
+      margin: 13px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+    }
+
+    .live-calc-left {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+      min-width: 0;
+    }
+
+    .live-calc-left strong {
+      color: #ffffff;
+      font-size: 14px;
+      display: block;
+    }
+
+    .live-calc-amount {
+      font-size: 24px;
+      font-weight: 900;
+      color: #34d399;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      color: #ffffff;
+      font-size: 15.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.28);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.99);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1.5px solid var(--input-border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1.5px solid var(--red-border);
+      border-radius: 12px;
+      background: var(--red-soft);
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .action-stack {
+      display: grid;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    /* Tabs */
+    .tab-page {
+      display: none;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    /* Month Navigator */
+    .month-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 8px 10px;
+      margin-bottom: 11px;
+    }
+
+    .month-nav-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      font-size: 19px;
+      font-weight: 900;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .month-center {
+      text-align: center;
+    }
+
+    .month-label {
+      font-size: 15.5px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .scope-toggle {
+      margin-top: 3px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 7px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .stat-val {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .stat-val.green { color: var(--green); }
+    .stat-val.amber { color: var(--amber); }
+
+    /* Payment Box */
+    .payment-summary-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 11px;
+    }
+
+    .pay-pill {
+      border-radius: 12px;
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+    }
+
+    .pay-pill.paid {
+      background: var(--green-soft);
+      border-color: var(--green-border);
+    }
+
+    .pay-pill.due {
+      background: var(--amber-soft);
+      border-color: var(--amber-border);
+    }
+
+    .pay-pill span {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .pay-pill strong {
+      display: block;
+      font-size: 16.5px;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+
+    .pay-pill.paid strong { color: var(--green); }
+    .pay-pill.due strong { color: var(--amber); }
+
+    /* Entry List */
+    .entry-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .entry-item:last-child {
+      border-bottom: none;
+      padding-bottom: 2px;
+    }
+
+    .entry-left {
+      min-width: 0;
+    }
+
+    .entry-date {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .shift-pill {
+      font-size: 10px;
+      font-weight: 800;
+      background: var(--card-soft);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .entry-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    .entry-note {
+      font-size: 12px;
+      color: var(--blue);
+      margin-top: 2px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .entry-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .entry-amt {
+      font-size: 15.5px;
+      font-weight: 900;
+      color: var(--green);
+    }
+
+    .entry-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      margin-top: 5px;
+    }
+
+    .mini-btn {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      color: var(--text-2);
+      cursor: pointer;
+    }
+
+    .mini-btn.restore {
+      color: var(--green);
+      border-color: var(--green-border);
+      background: var(--green-soft);
+    }
+
+    .mini-btn.del {
+      color: var(--red);
+      border-color: var(--red-border);
+      background: var(--red-soft);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 22px 12px;
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    /* Safety Shield Info */
+    .safety-box {
+      background: var(--green-soft);
+      border: 1px solid var(--green-border);
+      border-radius: 13px;
+      padding: 11px 13px;
+      font-size: 12px;
+      color: var(--text-2);
+      line-height: 1.45;
+      margin-bottom: 11px;
+    }
+
+    .safety-box strong {
+      color: var(--green);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 13px;
+    }
+
+    /* Trash Badge */
+    .trash-badge {
+      background: var(--red);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    /* Calculator */
+    .calc-display {
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 15px;
+      text-align: right;
+      margin-bottom: 11px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .calc-expr {
+      font-size: 13px;
+      color: #94a3b8;
+      min-height: 18px;
+      word-break: break-all;
+    }
+
+    .calc-val {
+      font-size: 31px;
+      font-weight: 900;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .c-btn {
+      padding: 14px 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .c-btn:active {
+      opacity: 0.78;
+    }
+
+    .c-btn.op {
+      background: var(--blue-soft);
+      color: var(--blue);
+      border-color: var(--blue-border);
+    }
+
+    .c-btn.eq {
+      background: #1d4ed8;
+      color: #ffffff;
+      border-color: #1d4ed8;
+    }
+
+    .c-btn.clr {
+      background: var(--red-soft);
+      color: var(--red);
+      border-color: var(--red-border);
+    }
+
+    .c-btn.rate-mul {
+      grid-column: span 2;
+      background: #065f46;
+      color: #ffffff;
+      border: none;
+      font-size: 13.5px;
+      padding: 13px 6px;
+    }
+
+    .c-btn.rate-div {
+      grid-column: span 2;
+      background: #1e3a8a;
+      color: #ffffff;
+      border: none;
+      font-size: 13.5px;
+      padding: 13px 6px;
+    }
+
+    .reverse-result {
+      margin-top: 10px;
+      background: var(--green-soft);
+      border: 1px solid var(--green-border);
+      border-radius: 12px;
+      padding: 11px 13px;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--green);
+      text-align: center;
+    }
+
+    /* Bottom Navigation (4 Tabs) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px 6px calc(8px + env(safe-area-inset-bottom));
+      z-index: 60;
+      box-shadow: 0 -2px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      padding: 6px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .nav-btn.active {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .nav-dot {
+      display: none;
+      position: absolute;
+      top: 4px;
+      right: 22%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+
+    .nav-dot.show {
+      display: block;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.68);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 390px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-box h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      color: var(--text);
+    }
+
+    .modal-box p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* Toast with Undo */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(86px + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #ffffff;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 10px 15px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s;
+      z-index: 120;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 92vw;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-undo {
+      background: #10b981;
+      color: #022c22;
+      border: none;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-row">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2.5C12 2.5 6 9.5 6 14.2C6 17.6 8.7 20.5 12 20.5C15.3 20.5 18 17.6 18 14.2C18 9.5 12 2.5 12 2.5Z" fill="#ffffff"/>
+            <path d="M9.5 15.2C9.5 16.8 10.6 18 12.2 18" stroke="#0284c7" stroke-width="1.9" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">Dudh Hisab • दूध हिसाब</div>
+          <div class="brand-sub"><span class="dot"></span> <span id="offlineStatusText">100% Offline Safe</span></div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button class="icon-btn" id="themeToggleBtn" type="button" title="Dark / Light Mode">🌙</button>
+        <button class="rate-pill" id="openRateBtn" type="button">
+          <span id="headerRateText">₹37/kg</span>
+          <span class="edit-tag">Rate</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Native PWA Install Banner -->
+    <div class="install-banner" id="installBanner">
+      <div class="install-banner-text">
+        <strong>📲 Phone mein Install Karein</strong>
+        Bina internet roz asli app ki tarah chalayein
+      </div>
+      <button class="btn-install" id="installAppBtn" type="button">Install</button>
+    </div>
+
+    <!-- Backup Reminder -->
+    <div class="backup-alert" id="backupAlert">
+      <span>🛡️ Apne data ka surakshit backup save kar lein</span>
+      <button type="button" id="quickBackupBtn">Backup Lein</button>
+    </div>
+
+    <!-- TAB 1: DAILY ENTRY -->
+    <section class="tab-page active" id="tab-entry">
+      <div class="summary-strip" id="jumpToHisab">
+        <div>
+          <div class="summary-strip-label" id="stripMonthLabel">IS MAHINE KA HISAB</div>
+          <div class="summary-strip-milk" id="stripMilkText">0 g (0 entries)</div>
+          <div class="summary-strip-today" id="stripTodayText">Aaj: 0 g (₹0.00)</div>
+        </div>
+        <div class="summary-strip-right">
+          <div class="summary-strip-money" id="stripMoneyText">₹0.00</div>
+          <div class="summary-strip-link">Poora Hisab →</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title" id="formHeading">✏️ Nayi Entry (दूध लिखें)</h2>
+          <span class="badge-rate" id="formRateBadge">Rate: ₹37/kg</span>
+        </div>
+
+        <input type="hidden" id="editId" value="" />
+
+        <div class="field">
+          <div class="field-label-row">
+            <label for="entryDate">Tarikh (तारीख)</label>
+            <span class="day-hint" id="dayHintText">Aaj</span>
+          </div>
+          <div class="date-row">
+            <input type="date" id="entryDate" />
+            <button type="button" class="btn-today" id="todayBtn">Aaj</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label-row">
+            <label>Samay / Shift (समय)</label>
+          </div>
+          <div class="shift-group">
+            <button type="button" class="shift-btn active" data-shift="Subah">🌅 Subah</button>
+            <button type="button" class="shift-btn" data-shift="Shaam">🌇 Shaam</button>
+            <button type="button" class="shift-btn" data-shift="Poora Din">📅 Poora Din</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label-row">
+            <label>Dudh ki Matra (किलो/लीटर और ग्राम/ml)</label>
+          </div>
+          <div class="qty-grid">
+            <div class="qty-box">
+              <input type="number" id="inputKg" inputmode="decimal" min="0" step="any" placeholder="0" />
+              <span class="qty-unit">kg / L</span>
+            </div>
+            <div class="qty-box">
+              <input type="number" id="inputGram" inputmode="numeric" min="0" step="1" placeholder="0" />
+              <span class="qty-unit">g / ml</span>
+            </div>
+          </div>
+
+          <div class="chips">
+            <button type="button" class="chip repeat-chip" id="repeatLastBtn" style="display:none;">⚡ Pichla: 0 kg</button>
+            <button type="button" class="chip" data-add-g="250">+250g</button>
+            <button type="button" class="chip" data-add-g="500">+500g</button>
+            <button type="button" class="chip" data-add-g="750">+750g</button>
+            <button type="button" class="chip" data-add-g="1000">+1 kg</button>
+            <button type="button" class="chip" data-add-g="2000">+2 kg</button>
+            <button type="button" class="chip clear-chip" id="clearQtyBtn">Clear</button>
+          </div>
+        </div>
+
+        <!-- Entry-specific Rate Override (visible only while editing) -->
+        <div class="edit-rate-wrap" id="editRateWrap">
+          <label for="editRateInput">Is Entry ka Rate (₹/kg)</label>
+          <input type="number" id="editRateInput" inputmode="decimal" min="1" step="any" />
+        </div>
+
+        <div class="field">
+          <div class="field-label-row">
+            <label for="inputNote">Note / Grahak ka Naam (वैकल्पिक)</label>
+          </div>
+          <input type="text" id="inputNote" placeholder="Jaise: Dairy, Extra dudh..." />
+        </div>
+
+        <div class="live-calc">
+          <div class="live-calc-left">
+            <strong id="liveFormulaTitle">0 g × ₹37/kg</strong>
+            <span id="liveFormulaSub">Matra likhein, paise apne aap dikhenge</span>
+          </div>
+          <div class="live-calc-amount" id="liveAmountText">₹0.00</div>
+        </div>
+
+        <div class="action-stack">
+          <button type="button" class="btn-primary" id="saveEntryBtn">💾 Entry Save Karein</button>
+          <button type="button" class="btn-secondary" id="cancelEditBtn" style="display:none;">Edit Cancel Karein</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🕒 Haal ki Entries</h3>
+        </div>
+        <div id="recentList"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: HISAB & PAYMENTS -->
+    <section class="tab-page" id="tab-hisab">
+      <div class="month-bar">
+        <button type="button" class="month-nav-btn" id="prevMonthBtn">‹</button>
+        <div class="month-center">
+          <div class="month-label" id="registerMonthTitle">November 2026</div>
+          <button type="button" class="scope-toggle" id="toggleAllTimeBtn">Sabhi Mahino ka Kul Dekhein</button>
+        </div>
+        <button type="button" class="month-nav-btn" id="nextMonthBtn">›</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Kul Dudh</div>
+          <div class="stat-val" id="statMilk">0 g</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Kul Bill</div>
+          <div class="stat-val green" id="statMoney">₹0.00</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Din / Entries</div>
+          <div class="stat-val" id="statDays">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Payment / Jama Tracker -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">💵 Mile Paise (Jama / Baaki)</h3>
+          <button type="button" class="mini-btn restore" id="openPayModalBtn">+ Paise Jama Likhein</button>
+        </div>
+        <div class="payment-summary-bar">
+          <div class="pay-pill paid">
+            <span>Mila Hua (Jama)</span>
+            <strong id="statPaid">₹0.00</strong>
+          </div>
+          <div class="pay-pill due">
+            <span id="statDueLabel">Baaki Lena Hai</span>
+            <strong id="statDue">₹0.00</strong>
+          </div>
+        </div>
+        <div id="paymentList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📒 Dudh Register</h3>
+        </div>
+        <div id="registerList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📤 Bill Share Karein</h3>
+        </div>
+        <div class="action-stack">
+          <button type="button" class="btn-whatsapp" id="shareWaBtn">💬 WhatsApp par Poora Bill Bhejein</button>
+          <div class="two-col">
+            <button type="button" class="btn-secondary" id="copyBillBtn">📋 Bill Copy Karein</button>
+            <button type="button" class="btn-secondary" id="exportCsvBtn">📊 Excel (.csv)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: CALCULATOR -->
+    <section class="tab-page" id="tab-calc">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🧮 Dudh Calculator</h3>
+          <span class="badge-rate" id="calcRateBadge">Rate: ₹37/kg</span>
+        </div>
+
+        <div class="calc-display">
+          <div class="calc-expr" id="calcExpr"></div>
+          <div class="calc-val" id="calcVal">0</div>
+        </div>
+
+        <div class="calc-grid">
+          <button type="button" class="c-btn clr" data-c="C">C</button>
+          <button type="button" class="c-btn op" data-c="BACK">⌫</button>
+          <button type="button" class="c-btn op" data-c="/">÷</button>
+          <button type="button" class="c-btn op" data-c="*">×</button>
+
+          <button type="button" class="c-btn" data-c="7">7</button>
+          <button type="button" class="c-btn" data-c="8">8</button>
+          <button type="button" class="c-btn" data-c="9">9</button>
+          <button type="button" class="c-btn op" data-c="-">−</button>
+
+          <button type="button" class="c-btn" data-c="4">4</button>
+          <button type="button" class="c-btn" data-c="5">5</button>
+          <button type="button" class="c-btn" data-c="6">6</button>
+          <button type="button" class="c-btn op" data-c="+">+</button>
+
+          <button type="button" class="c-btn" data-c="1">1</button>
+          <button type="button" class="c-btn" data-c="2">2</button>
+          <button type="button" class="c-btn" data-c="3">3</button>
+          <button type="button" class="c-btn eq" data-c="=">=</button>
+
+          <button type="button" class="c-btn" data-c="0" style="grid-column: span 2;">0</button>
+          <button type="button" class="c-btn" data-c=".">.</button>
+          <button type="button" class="c-btn op" data-c="00">00</button>
+
+          <button type="button" class="c-btn rate-mul" id="calcMulRateBtn">× ₹37 (Paise Nikalein)</button>
+          <button type="button" class="c-btn rate-div" id="calcDivRateBtn">÷ ₹37 (kg Nikalein)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">⚡ Paise se Dudh Check Karein</h3>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <div class="field-label-row">
+            <label for="reverseRupees">Kitne Rupaye ka Dudh? (₹)</label>
+          </div>
+          <input type="number" id="reverseRupees" inputmode="decimal" placeholder="Jaise: 100" />
+          <div class="chips">
+            <button type="button" class="chip" data-rs="50">₹50</button>
+            <button type="button" class="chip" data-rs="100">₹100</button>
+            <button type="button" class="chip" data-rs="200">₹200</button>
+            <button type="button" class="chip" data-rs="500">₹500</button>
+          </div>
+          <div class="reverse-result" id="reverseResult">₹100 mein = 2 kg 703 g (₹37/kg par)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: BACKUP, RECOVERY & RECYCLE BIN -->
+    <section class="tab-page" id="tab-safe">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🛡️ Data Suraksha &amp; Backup</h3>
+        </div>
+        <div class="safety-box">
+          <strong>✅ Double Offline Protection ON</strong>
+          Aapka poora hisab phone mein <b>2 alag jagah</b> (Local Storage + IndexedDB Database) automatically save hota hai. App delete hone se bachne ke liye hafte mein 1 baar backup file ya WhatsApp backup zaroor save karein.
+          <div id="lastBackupInfo" style="margin-top:5px;font-weight:800;"></div>
+        </div>
+
+        <div class="action-stack">
+          <button type="button" class="btn-primary" id="exportJsonBtn">⬇️ Surakshit Backup File Save Karein (.json)</button>
+          <button type="button" class="btn-whatsapp" id="waBackupBtn">💬 Backup Code WhatsApp par Khud ko Bhejein</button>
+          <div class="two-col">
+            <button type="button" class="btn-secondary" id="importJsonBtn">⬆️ File se Restore</button>
+            <button type="button" class="btn-secondary" id="openTextRestoreBtn">📋 Code se Restore</button>
+          </div>
+          <input type="file" id="importFileInput" accept=".json,application/json,text/plain" style="display:none;" />
+        </div>
+      </div>
+
+      <!-- Recycle Bin -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">♻️ Recycle Bin (Delete Hui Entries)</h3>
+          <span class="trash-badge" id="trashCountBadge">0</span>
+        </div>
+        <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted);">
+          Galti se koi entry delete ho jaye toh yahan se kabhi bhi <b>1 tap mein wapas Restore</b> kar sakte hain.
+        </p>
+        <div id="trashList"></div>
+        <div id="emptyTrashWrap" style="display:none;margin-top:12px;">
+          <button type="button" class="btn-danger" id="emptyTrashBtn">🗑️ Recycle Bin Hamesha ke liye Khali Karein</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button type="button" class="nav-btn active" data-tab="entry">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      <span>Entry</span>
+    </button>
+    <button type="button" class="nav-btn" data-tab="hisab">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+      <span>Hisab</span>
+    </button>
+    <button type="button" class="nav-btn" data-tab="calc">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="8" x2="8.01" y1="10" y2="10"/><line x1="12" x2="12.01" y1="10" y2="10"/><line x1="16" x2="16.01" y1="10" y2="10"/><line x1="8" x2="8.01" y1="14" y2="14"/><line x1="12" x2="12.01" y1="14" y2="14"/><line x1="16" x2="16.01" y1="14" y2="14"/><line x1="8" x2="16" y1="18" y2="18"/></svg>
+      <span>Calculator</span>
+    </button>
+    <button type="button" class="nav-btn" data-tab="safe">
+      <span class="nav-dot" id="trashNavDot"></span>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Backup</span>
+    </button>
+  </nav>
+
+  <!-- Modal 1: Rate Change -->
+  <div class="modal-backdrop" id="rateModal">
+    <div class="modal-box">
+      <h3>Dudh ka Default Rate (₹/kg)</h3>
+      <p>Naya rate aage ki entries par lagu hoga. Purani entries ka hisab bilkul safe rahega.</p>
+      <div class="field">
+        <input type="number" id="newRateInput" inputmode="decimal" min="1" step="any" />
+      </div>
+      <div class="two-col">
+        <button type="button" class="btn-secondary" id="closeRateModalBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="saveRateBtn" style="padding:11px;">Save Karein</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Add Payment -->
+  <div class="modal-backdrop" id="payModal">
+    <div class="modal-box">
+      <h3>💵 Mile Hue Paise (Jama)</h3>
+      <p>Jab aapko dudh ke paise milein, yahan likh dein — baaki hisab apne aap ghat jayega.</p>
+      <div class="field">
+        <label for="payDate">Tarikh</label>
+        <input type="date" id="payDate" style="margin-top:5px;" />
+      </div>
+      <div class="field">
+        <label for="payAmount">Kitne Paise Mile? (₹)</label>
+        <input type="number" id="payAmount" inputmode="decimal" min="1" step="any" placeholder="Jaise: 1000" style="margin-top:5px;" />
+      </div>
+      <div class="field">
+        <label for="payNote">Note (वैकल्पिक)</label>
+        <input type="text" id="payNote" placeholder="Jaise: Cash, PhonePe..." style="margin-top:5px;" />
+      </div>
+      <div class="two-col">
+        <button type="button" class="btn-secondary" id="closePayModalBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="savePayBtn" style="padding:11px;">Jama Save Karein</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Text/Code Restore -->
+  <div class="modal-backdrop" id="textRestoreModal">
+    <div class="modal-box">
+      <h3>📋 Backup Code se Restore Karein</h3>
+      <p>WhatsApp par bheja gaya Backup Code yahan paste karein. Aapka purana saara data wapas aa jayega.</p>
+      <div class="field">
+        <textarea id="restoreCodeInput" rows="5" placeholder='{"app":"Dudh Hisab"...}' style="font-size:12px;"></textarea>
+      </div>
+      <div class="two-col">
+        <button type="button" class="btn-secondary" id="closeTextRestoreBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="runTextRestoreBtn" style="padding:11px;">Restore Karein</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Restore Choice (Merge vs Replace) -->
+  <div class="modal-backdrop" id="restoreModeModal">
+    <div class="modal-box">
+      <h3>♻️ Data Restore Kaise Karein?</h3>
+      <p id="restorePreviewText"></p>
+      <div class="action-stack">
+        <button type="button" class="btn-primary" id="restoreMergeBtn" style="padding:12px;">➕ Merge Karein (Abhi ka + Backup dono safe)</button>
+        <button type="button" class="btn-danger" id="restoreReplaceBtn">🔄 Poora Replace Karein (Sirf Backup rakhein)</button>
+        <button type="button" class="btn-secondary" id="restoreCancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Custom Confirm / Duplicate Dialog -->
+  <div class="modal-backdrop" id="confirmModal">
+    <div class="modal-box">
+      <h3 id="confirmTitle">Confirm</h3>
+      <p id="confirmBody"></p>
+      <div class="action-stack" id="confirmBtns"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span id="toastText"></span>
+    <button type="button" class="toast-undo" id="toastUndoBtn" style="display:none;">Wapas Layein</button>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Storage Keys (backwards compatible with v2)
+      const KEY_ENTRIES = 'dudh_hisab_entries_v2';
+      const KEY_PAYMENTS = 'dudh_hisab_payments_v3';
+      const KEY_TRASH = 'dudh_hisab_trash_v3';
+      const KEY_RATE = 'dudh_hisab_rate_v2';
+      const KEY_THEME = 'dudh_hisab_theme_v3';
+      const KEY_LAST_BACKUP = 'dudh_hisab_last_backup_v3';
+
+      const MONTHS_HI = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const MONTHS_SHORT = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+      const DAYS_HI = ['Ravivar', 'Somvar', 'Mangalvar', 'Budhvar', 'Guruvar', 'Shukravar', 'Shanivar'];
+
+      // IndexedDB Dual-Storage Mirror
+      const IDB_NAME = 'DudhHisabSafeDB';
+      const IDB_STORE = 'state';
+
+      function openIDB() {
+        return new Promise((resolve, reject) => {
+          if (!('indexedDB' in window)) return reject(new Error('No IDB'));
+          const req = indexedDB.open(IDB_NAME, 1);
+          req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(IDB_STORE)) {
+              db.createObjectStore(IDB_STORE);
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      }
+
+      async function saveToIDB(snapshot) {
+        try {
+          const db = await openIDB();
+          await new Promise((resolve, reject) => {
+            const tx = db.transaction(IDB_STORE, 'readwrite');
+            tx.objectStore(IDB_STORE).put(snapshot, 'snapshot');
+            tx.oncomplete = resolve;
+            tx.onerror = () => reject(tx.error);
+          });
+        } catch (e) {}
+      }
+
+      async function loadFromIDB() {
+        try {
+          const db = await openIDB();
+          return await new Promise((resolve, reject) => {
+            const tx = db.transaction(IDB_STORE, 'readonly');
+            const req = tx.objectStore(IDB_STORE).get('snapshot');
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => reject(req.error);
+          });
+        } catch (e) {
+          return null;
+        }
+      }
+
+      // Request Persistent Storage from Android/Chrome
+      if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().catch(() => {});
+      }
+
+      // App State
+      let entries = readJSON(KEY_ENTRIES, []);
+      let payments = readJSON(KEY_PAYMENTS, []);
+      let trash = readJSON(KEY_TRASH, []);
+      let currentRate = readRate();
+      let selectedShift = 'Subah';
+      let viewDate = new Date();
+      let showAllTime = false;
+      let deferredPrompt = null;
+      let pendingRestoreData = null;
+      let undoCallback = null;
+
+      function readJSON(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      }
+
+      function readRate() {
+        const r = parseFloat(localStorage.getItem(KEY_RATE));
+        return (!isNaN(r) && r > 0) ? r : 37;
+      }
+
+      function persistAll() {
+        try {
+          localStorage.setItem(KEY_ENTRIES, JSON.stringify(entries));
+          localStorage.setItem(KEY_PAYMENTS, JSON.stringify(payments));
+          localStorage.setItem(KEY_TRASH, JSON.stringify(trash));
+          localStorage.setItem(KEY_RATE, String(currentRate));
+        } catch (e) {}
+        saveToIDB({
+          entries,
+          payments,
+          trash,
+          rate: currentRate,
+          savedAt: Date.now()
+        });
+      }
+
+      // Auto-recover from IndexedDB if localStorage got wiped
+      async function checkIDBRecovery() {
+        if (entries.length === 0 && payments.length === 0 && trash.length === 0) {
+          const snap = await loadFromIDB();
+          if (snap && (
+            (Array.isArray(snap.entries) && snap.entries.length > 0) ||
+            (Array.isArray(snap.payments) && snap.payments.length > 0) ||
+            (Array.isArray(snap.trash) && snap.trash.length > 0)
+          )) {
+            entries = snap.entries || [];
+            payments = snap.payments || [];
+            trash = snap.trash || [];
+            if (snap.rate && snap.rate > 0) currentRate = Number(snap.rate);
+            persistAll();
+            updateRateUI();
+            renderAll();
+            showToast('Backup database se data auto-recover ho gaya ✅');
+          }
+        } else {
+          // Ensure IDB is synced
+          persistAll();
+        }
+      }
+
+      // DOM Refs
+      const entryDate = document.getElementById('entryDate');
+      const dayHintText = document.getElementById('dayHintText');
+      const inputKg = document.getElementById('inputKg');
+      const inputGram = document.getElementById('inputGram');
+      const inputNote = document.getElementById('inputNote');
+      const editIdInput = document.getElementById('editId');
+      const editRateWrap = document.getElementById('editRateWrap');
+      const editRateInput = document.getElementById('editRateInput');
+      const formHeading = document.getElementById('formHeading');
+      const saveEntryBtn = document.getElementById('saveEntryBtn');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const liveFormulaTitle = document.getElementById('liveFormulaTitle');
+      const liveFormulaSub = document.getElementById('liveFormulaSub');
+      const liveAmountText = document.getElementById('liveAmountText');
+      const repeatLastBtn = document.getElementById('repeatLastBtn');
+
+      // Helpers
+      function getTodayISO() {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+
+      function formatDisplayDate(iso) {
+        if (!iso || typeof iso !== 'string') return '';
+        const p = iso.split('-');
+        return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : iso;
+      }
+
+      function formatMilk(totalGrams) {
+        const g = Math.max(0, Math.round(Number(totalGrams) || 0));
+        const kg = Math.floor(g / 1000);
+        const rem = g % 1000;
+        if (kg > 0 && rem > 0) return `${kg} kg ${rem} g`;
+        if (kg > 0) return `${kg} kg`;
+        return `${rem} g`;
+      }
+
+      function formatMoney(num) {
+        return '₹' + (Number(num) || 0).toFixed(2);
+      }
+
+      function escapeHtml(str) {
+        return String(str || '').replace(/[&<>"']/g, m => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
+      }
+
+      function showToast(msg, onUndo) {
+        const t = document.getElementById('toast');
+        const txt = document.getElementById('toastText');
+        const undoBtn = document.getElementById('toastUndoBtn');
+        txt.textContent = msg;
+        undoCallback = typeof onUndo === 'function' ? onUndo : null;
+        undoBtn.style.display = undoCallback ? 'inline-block' : 'none';
+        t.classList.add('show');
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(() => {
+          t.classList.remove('show');
+          undoCallback = null;
+        }, undoCallback ? 5000 : 2400);
+      }
+
+      document.getElementById('toastUndoBtn').addEventListener('click', () => {
+        if (undoCallback) {
+          const fn = undoCallback;
+          undoCallback = null;
+          document.getElementById('toast').classList.remove('show');
+          fn();
+        }
+      });
+
+      // Custom Modal Confirm Dialog
+      function openConfirmDialog(title, body, buttons) {
+        const modal = document.getElementById('confirmModal');
+        document.getElementById('confirmTitle').textContent = title;
+        document.getElementById('confirmBody').textContent = body;
+        const wrap = document.getElementById('confirmBtns');
+        wrap.innerHTML = '';
+        buttons.forEach(b => {
+          const el = document.createElement('button');
+          el.type = 'button';
+          el.className = b.className || 'btn-secondary';
+          el.textContent = b.label;
+          el.style.padding = '12px';
+          el.addEventListener('click', () => {
+            modal.classList.remove('show');
+            if (b.onClick) b.onClick();
+          });
+          wrap.appendChild(el);
+        });
+        modal.classList.add('show');
+      }
+
+      // Theme Toggle
+      function applyTheme(dark) {
+        document.body.classList.toggle('dark', dark);
+        document.getElementById('themeToggleBtn').textContent = dark ? '☀️' : '🌙';
+        try { localStorage.setItem(KEY_THEME, dark ? 'dark' : 'light'); } catch (e) {}
+      }
+      applyTheme(localStorage.getItem(KEY_THEME) === 'dark');
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        applyTheme(!document.body.classList.contains('dark'));
+      });
+
+      function updateDayHint() {
+        const val = entryDate.value;
+        if (!val) return;
+        const [y, m, d] = val.split('-').map(Number);
+        const dt = new Date(y, m - 1, d);
+        const dayName = DAYS_HI[dt.getDay()];
+        dayHintText.textContent = (val === getTodayISO()) ? `Aaj • ${dayName}` : dayName;
+      }
+
+      function getActiveFormRate() {
+        if (editIdInput.value) {
+          const er = parseFloat(editRateInput.value);
+          if (!isNaN(er) && er > 0) return er;
+        }
+        return currentRate;
+      }
+
+      function getInputTotalGrams() {
+        const kg = Math.max(0, parseFloat(inputKg.value) || 0);
+        const g = Math.max(0, parseFloat(inputGram.value) || 0);
+        return Math.round(kg * 1000 + g);
+      }
+
+      function updateLiveCalc() {
+        const totalGrams = getInputTotalGrams();
+        const rate = getActiveFormRate();
+        const kgDec = totalGrams / 1000;
+        const amt = kgDec * rate;
+        liveFormulaTitle.textContent = `${formatMilk(totalGrams)} × ₹${rate}/kg`;
+        liveFormulaSub.textContent = totalGrams > 0
+          ? `${kgDec.toFixed(3)} kg/L ka exact hisab`
+          : 'Matra likhein, paise apne aap dikhenge';
+        liveAmountText.textContent = formatMoney(amt);
+      }
+
+      function updateRateUI() {
+        document.getElementById('headerRateText').textContent = `₹${currentRate}/kg`;
+        document.getElementById('formRateBadge').textContent = `Rate: ₹${currentRate}/kg`;
+        document.getElementById('calcRateBadge').textContent = `Rate: ₹${currentRate}/kg`;
+        document.getElementById('calcMulRateBtn').textContent = `× ₹${currentRate} (Paise)`;
+        document.getElementById('calcDivRateBtn').textContent = `÷ ₹${currentRate} (kg)`;
+        updateLiveCalc();
+        updateReverseCalc();
+      }
+
+      function setShift(shift) {
+        selectedShift = shift;
+        document.querySelectorAll('.shift-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.shift === shift);
+        });
+      }
+
+      function resetForm() {
+        editIdInput.value = '';
+        inputKg.value = '';
+        inputGram.value = '';
+        inputNote.value = '';
+        entryDate.value = getTodayISO();
+        setShift('Subah');
+        editRateWrap.classList.remove('show');
+        formHeading.textContent = '✏️ Nayi Entry (दूध लिखें)';
+        saveEntryBtn.textContent = '💾 Entry Save Karein';
+        cancelEditBtn.style.display = 'none';
+        updateDayHint();
+        updateLiveCalc();
+      }
+
+      function updateBackupBanner() {
+        const lastRaw = localStorage.getItem(KEY_LAST_BACKUP);
+        const infoEl = document.getElementById('lastBackupInfo');
+        const alertEl = document.getElementById('backupAlert');
+
+        if (lastRaw) {
+          const dt = new Date(Number(lastRaw));
+          infoEl.textContent = `Aakhiri Backup: ${dt.toLocaleDateString('hi-IN')} ${dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })}`;
+          const daysAgo = (Date.now() - Number(lastRaw)) / (1000 * 60 * 60 * 24);
+          alertEl.classList.toggle('show', entries.length >= 5 && daysAgo >= 7);
+        } else {
+          infoEl.textContent = 'Abhi tak koi backup file download nahi ki gayi hai.';
+          alertEl.classList.toggle('show', entries.length >= 7);
+        }
+      }
+
+      function renderAll() {
+        const sortedEntries = [...entries].sort((a, b) => {
+          if (b.date !== a.date) return b.date.localeCompare(a.date);
+          return (b.createdAt || 0) - (a.createdAt || 0);
+        });
+
+        // Repeat Last Entry quick chip
+        if (sortedEntries.length > 0) {
+          const last = sortedEntries[0];
+          repeatLastBtn.style.display = 'inline-block';
+          repeatLastBtn.textContent = `⚡ Pichla: ${formatMilk(last.grams)}`;
+          repeatLastBtn.dataset.grams = String(last.grams);
+        } else {
+          repeatLastBtn.style.display = 'none';
+        }
+
+        // Top Strip on Tab 1 (Current Month + Today)
+        const now = new Date();
+        const curYM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const todayISO = getTodayISO();
+        const curEntries = entries.filter(e => e.date.startsWith(curYM));
+        const curGrams = curEntries.reduce((s, e) => s + e.grams, 0);
+        const curMoney = curEntries.reduce((s, e) => s + e.amount, 0);
+
+        const todayEntries = entries.filter(e => e.date === todayISO);
+        const todayGrams = todayEntries.reduce((s, e) => s + e.grams, 0);
+        const todayMoney = todayEntries.reduce((s, e) => s + e.amount, 0);
+
+        document.getElementById('stripMonthLabel').textContent = `${MONTHS_SHORT[now.getMonth()]} ${now.getFullYear()} KA HISAB`;
+        document.getElementById('stripMilkText').textContent = `${formatMilk(curGrams)} (${curEntries.length} entries)`;
+        document.getElementById('stripTodayText').textContent = `Aaj: ${formatMilk(todayGrams)} (${formatMoney(todayMoney)})`;
+        document.getElementById('stripMoneyText').textContent = formatMoney(curMoney);
+
+        // Recent 5 Entries
+        const recentEl = document.getElementById('recentList');
+        const recent = sortedEntries.slice(0, 5);
+        recentEl.innerHTML = recent.length === 0
+          ? '<div class="empty-state">Abhi koi entry nahi hai. Upar dudh likh kar Save karein.</div>'
+          : recent.map(renderEntryHTML).join('');
+
+        // Register Tab (Month or All-Time)
+        const vy = viewDate.getFullYear();
+        const vm = viewDate.getMonth();
+        const viewYM = `${vy}-${String(vm + 1).padStart(2, '0')}`;
+        document.getElementById('registerMonthTitle').textContent = showAllTime ? 'Sabhi Mahine (All Time)' : `${MONTHS_HI[vm]} ${vy}`;
+        document.getElementById('toggleAllTimeBtn').textContent = showAllTime ? 'Sirf Is Mahine ka Dekhein' : 'Sabhi Mahino ka Kul Dekhein';
+        document.getElementById('prevMonthBtn').disabled = showAllTime;
+        document.getElementById('nextMonthBtn').disabled = showAllTime;
+        document.getElementById('prevMonthBtn').style.opacity = showAllTime ? '0.35' : '1';
+        document.getElementById('nextMonthBtn').style.opacity = showAllTime ? '0.35' : '1';
+
+        const filteredEntries = showAllTime ? sortedEntries : sortedEntries.filter(e => e.date.startsWith(viewYM));
+        const mGrams = filteredEntries.reduce((s, e) => s + e.grams, 0);
+        const mBill = filteredEntries.reduce((s, e) => s + e.amount, 0);
+        const uniqueDays = new Set(filteredEntries.map(e => e.date)).size;
+
+        document.getElementById('statMilk').textContent = formatMilk(mGrams);
+        document.getElementById('statMoney').textContent = formatMoney(mBill);
+        document.getElementById('statDays').textContent = `${uniqueDays} / ${filteredEntries.length}`;
+
+        // Payments for same period
+        const sortedPayments = [...payments].sort((a, b) => b.date.localeCompare(a.date) || (b.createdAt || 0) - (a.createdAt || 0));
+        const filteredPayments = showAllTime ? sortedPayments : sortedPayments.filter(p => p.date.startsWith(viewYM));
+        const mPaid = filteredPayments.reduce((s, p) => s + p.amount, 0);
+        const mDue = mBill - mPaid;
+
+        document.getElementById('statPaid').textContent = formatMoney(mPaid);
+        document.getElementById('statDueLabel').textContent = mDue >= 0 ? 'Baaki Lena Hai' : 'Advance Jama Hai';
+        document.getElementById('statDue').textContent = formatMoney(Math.abs(mDue));
+
+        const payListEl = document.getElementById('paymentList');
+        if (filteredPayments.length === 0) {
+          payListEl.innerHTML = '<div class="empty-state" style="padding:10px 6px;font-size:12.5px;">Is mahine koi jama payment entry nahi hai.</div>';
+        } else {
+          payListEl.innerHTML = filteredPayments.map(p => `
+            <div class="entry-item">
+              <div class="entry-left">
+                <div class="entry-date">
+                  <span>${formatDisplayDate(p.date)}</span>
+                  <span class="shift-pill">Jama</span>
+                </div>
+                ${p.note ? `<div class="entry-note">📝 ${escapeHtml(p.note)}</div>` : ''}
+              </div>
+              <div class="entry-right">
+                <div class="entry-amt">+${formatMoney(p.amount)}</div>
+                <div class="entry-actions">
+                  <button type="button" class="mini-btn del" onclick="window._delPayment('${p.id}')">Delete</button>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Register List
+        const regEl = document.getElementById('registerList');
+        regEl.innerHTML = filteredEntries.length === 0
+          ? `<div class="empty-state">${showAllTime ? 'Abhi koi entry nahi hai.' : MONTHS_HI[vm] + ' ' + vy + ' mein koi entry nahi mili.'}</div>`
+          : filteredEntries.map(renderEntryHTML).join('');
+
+        // Recycle Bin
+        renderTrash();
+        updateBackupBanner();
+      }
+
+      function renderEntryHTML(e) {
+        const noteHtml = e.note ? `<div class="entry-note">📝 ${escapeHtml(e.note)}</div>` : '';
+        return `
+          <div class="entry-item">
+            <div class="entry-left">
+              <div class="entry-date">
+                <span>${formatDisplayDate(e.date)}</span>
+                <span class="shift-pill">${escapeHtml(e.shift)}</span>
+              </div>
+              <div class="entry-meta">${formatMilk(e.grams)} × ₹${e.rate}/kg</div>
+              ${noteHtml}
+            </div>
+            <div class="entry-right">
+              <div class="entry-amt">${formatMoney(e.amount)}</div>
+              <div class="entry-actions">
+                <button type="button" class="mini-btn" onclick="window._editEntry('${e.id}')">Edit</button>
+                <button type="button" class="mini-btn del" onclick="window._delEntry('${e.id}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderTrash() {
+        const badge = document.getElementById('trashCountBadge');
+        const navDot = document.getElementById('trashNavDot');
+        const listEl = document.getElementById('trashList');
+        const emptyWrap = document.getElementById('emptyTrashWrap');
+
+        badge.textContent = String(trash.length);
+        navDot.classList.toggle('show', trash.length > 0);
+        emptyWrap.style.display = trash.length > 0 ? 'block' : 'none';
+
+        if (trash.length === 0) {
+          listEl.innerHTML = '<div class="empty-state" style="padding:14px;">Recycle Bin khali hai — sab kuch safe hai ✅</div>';
+          return;
+        }
+
+        const sortedTrash = [...trash].sort((a, b) => (b.deletedAt || 0) - (a.deletedAt || 0));
+        listEl.innerHTML = sortedTrash.map(item => {
+          const isPay = item._type === 'payment';
+          return `
+            <div class="entry-item">
+              <div class="entry-left">
+                <div class="entry-date">
+                  <span>${formatDisplayDate(item.date)}</span>
+                  <span class="shift-pill">${isPay ? 'Jama Payment' : escapeHtml(item.shift)}</span>
+                </div>
+                <div class="entry-meta">${isPay ? 'Mila Hua Paisa' : `${formatMilk(item.grams)} × ₹${item.rate}/kg`}</div>
+                ${item.note ? `<div class="entry-note">📝 ${escapeHtml(item.note)}</div>` : ''}
+              </div>
+              <div class="entry-right">
+                <div class="entry-amt">${formatMoney(item.amount)}</div>
+                <div class="entry-actions">
+                  <button type="button" class="mini-btn restore" onclick="window._restoreTrash('${item.id}')">↩️ Restore</button>
+                  <button type="button" class="mini-btn del" onclick="window._permDeleteTrash('${item.id}')">✕</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Edit / Soft-Delete / Restore Actions
+      window._editEntry = function (id) {
+        const item = entries.find(e => e.id === id);
+        if (!item) return;
+        editIdInput.value = item.id;
+        entryDate.value = item.date;
+        setShift(item.shift);
+        const kg = Math.floor(item.grams / 1000);
+        const g = item.grams % 1000;
+        inputKg.value = kg > 0 ? kg : '';
+        inputGram.value = g > 0 ? g : '';
+        inputNote.value = item.note || '';
+        editRateInput.value = item.rate;
+        editRateWrap.classList.add('show');
+        formHeading.textContent = '✏️ Entry Edit Karein';
+        saveEntryBtn.textContent = '✅ Badlav Save Karein';
+        cancelEditBtn.style.display = 'block';
+        switchTab('entry');
+        updateDayHint();
+        updateLiveCalc();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      window._delEntry = function (id) {
+        const item = entries.find(e => e.id === id);
+        if (!item) return;
+        entries = entries.filter(e => e.id !== id);
+        const trashed = { ...item, _type: 'entry', deletedAt: Date.now() };
+        trash.unshift(trashed);
+        persistAll();
+        renderAll();
+        showToast('Entry Recycle Bin mein gayi', () => {
+          window._restoreTrash(trashed.id);
+        });
+      };
+
+      window._delPayment = function (id) {
+        const item = payments.find(p => p.id === id);
+        if (!item) return;
+        payments = payments.filter(p => p.id !== id);
+        const trashed = { ...item, _type: 'payment', deletedAt: Date.now() };
+        trash.unshift(trashed);
+        persistAll();
+        renderAll();
+        showToast('Payment Recycle Bin mein gayi', () => {
+          window._restoreTrash(trashed.id);
+        });
+      };
+
+      window._restoreTrash = function (id) {
+        const item = trash.find(t => t.id === id);
+        if (!item) return;
+        trash = trash.filter(t => t.id !== id);
+        const clean = { ...item };
+        const type = clean._type || 'entry';
+        delete clean._type;
+        delete clean.deletedAt;
+        if (type === 'payment') {
+          payments.push(clean);
+        } else {
+          entries.push(clean);
+        }
+        persistAll();
+        renderAll();
+        showToast('Wapas Restore ho gaya ✅');
+      };
+
+      window._permDeleteTrash = function (id) {
+        openConfirmDialog(
+          'Hamesha ke liye Delete karein?',
+          'Yeh entry Recycle Bin se hamesha ke liye hat jayegi.',
+          [
+            {
+              label: 'Haan, Delete Karein',
+              className: 'btn-danger',
+              onClick: () => {
+                trash = trash.filter(t => t.id !== id);
+                persistAll();
+                renderAll();
+                showToast('Permanently delete ho gaya');
+              }
+            },
+            { label: 'Cancel', className: 'btn-secondary' }
+          ]
+        );
+      };
+
+      document.getElementById('emptyTrashBtn').addEventListener('click', () => {
+        openConfirmDialog(
+          'Recycle Bin Khali Karein?',
+          `Ismein ${trash.length} deleted entries hain. Sab hamesha ke liye hat jayengi.`,
+          [
+            {
+              label: 'Haan, Sab Hatayein',
+              className: 'btn-danger',
+              onClick: () => {
+                trash = [];
+                persistAll();
+                renderAll();
+                showToast('Recycle Bin khali ho gaya');
+              }
+            },
+            { label: 'Cancel', className: 'btn-secondary' }
+          ]
+        );
+      });
+
+      // Navigation
+      function switchTab(tabName) {
+        document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + tabName).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.tab === tabName);
+        });
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+      document.getElementById('jumpToHisab').addEventListener('click', () => switchTab('hisab'));
+
+      // Entry Form Interactions
+      document.querySelectorAll('.shift-btn').forEach(btn => {
+        btn.addEventListener('click', () => setShift(btn.dataset.shift));
+      });
+
+      entryDate.addEventListener('change', updateDayHint);
+      document.getElementById('todayBtn').addEventListener('click', () => {
+        entryDate.value = getTodayISO();
+        updateDayHint();
+      });
+
+      inputKg.addEventListener('input', updateLiveCalc);
+      inputGram.addEventListener('input', updateLiveCalc);
+      editRateInput.addEventListener('input', updateLiveCalc);
+
+      document.querySelectorAll('.chip[data-add-g]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const total = getInputTotalGrams() + parseInt(chip.dataset.addG, 10);
+          const kg = Math.floor(total / 1000);
+          const rem = total % 1000;
+          inputKg.value = kg > 0 ? kg : '';
+          inputGram.value = rem > 0 ? rem : '';
+          updateLiveCalc();
+        });
+      });
+
+      repeatLastBtn.addEventListener('click', () => {
+        const gTotal = parseInt(repeatLastBtn.dataset.grams, 10) || 0;
+        if (gTotal <= 0) return;
+        const kg = Math.floor(gTotal / 1000);
+        const rem = gTotal % 1000;
+        inputKg.value = kg > 0 ? kg : '';
+        inputGram.value = rem > 0 ? rem : '';
+        updateLiveCalc();
+      });
+
+      document.getElementById('clearQtyBtn').addEventListener('click', () => {
+        inputKg.value = '';
+        inputGram.value = '';
+        updateLiveCalc();
+      });
+
+      function commitEntrySave(dateVal, totalGrams, noteVal, rateUsed, editId) {
+        if (editId) {
+          const idx = entries.findIndex(e => e.id === editId);
+          if (idx !== -1) {
+            entries[idx] = {
+              ...entries[idx],
+              date: dateVal,
+              shift: selectedShift,
+              grams: totalGrams,
+              rate: rateUsed,
+              amount: Number(((totalGrams / 1000) * rateUsed).toFixed(2)),
+              note: noteVal
+            };
+          }
+          showToast('Entry update ho gayi ✅');
+        } else {
+          entries.push({
+            id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            date: dateVal,
+            shift: selectedShift,
+            grams: totalGrams,
+            rate: rateUsed,
+            amount: Number(((totalGrams / 1000) * rateUsed).toFixed(2)),
+            note: noteVal,
+            createdAt: Date.now()
+          });
+          showToast('Entry save ho gayi ✅');
+        }
+        persistAll();
+        resetForm();
+        renderAll();
+      }
+
+      saveEntryBtn.addEventListener('click', () => {
+        const dateVal = entryDate.value || getTodayISO();
+        const totalGrams = getInputTotalGrams();
+        if (totalGrams <= 0) {
+          showToast('Kripya dudh ki matra likhein');
+          return;
+        }
+        const noteVal = inputNote.value.trim();
+        const editId = editIdInput.value;
+        const rateUsed = getActiveFormRate();
+
+        // Smart Duplicate Protection (only for new entries)
+        if (!editId) {
+          const existing = entries.find(e => e.date === dateVal && e.shift === selectedShift);
+          if (existing) {
+            openConfirmDialog(
+              '⚠️ Pehle se Entry Maujood Hai',
+              `${formatDisplayDate(dateVal)} (${selectedShift}) ki entry (${formatMilk(existing.grams)}) pehle se save hai. Aap kya karna chahte hain?`,
+              [
+                {
+                  label: '➕ Alag Nayi Entry Jodein',
+                  className: 'btn-primary',
+                  onClick: () => commitEntrySave(dateVal, totalGrams, noteVal, rateUsed, '')
+                },
+                {
+                  label: '✏️ Purani Entry mein Jod dein',
+                  className: 'btn-secondary',
+                  onClick: () => {
+                    const combinedG = existing.grams + totalGrams;
+                    const combinedNote = [existing.note, noteVal].filter(Boolean).join(', ');
+                    commitEntrySave(dateVal, combinedG, combinedNote, existing.rate, existing.id);
+                  }
+                },
+                { label: 'Cancel', className: 'btn-secondary' }
+              ]
+            );
+            return;
+          }
+        }
+
+        commitEntrySave(dateVal, totalGrams, noteVal, rateUsed, editId);
+      });
+
+      cancelEditBtn.addEventListener('click', resetForm);
+
+      // Month Navigation
+      document.getElementById('prevMonthBtn').addEventListener('click', () => {
+        if (showAllTime) return;
+        viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+        renderAll();
+      });
+
+      document.getElementById('nextMonthBtn').addEventListener('click', () => {
+        if (showAllTime) return;
+        viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+        renderAll();
+      });
+
+      document.getElementById('toggleAllTimeBtn').addEventListener('click', () => {
+        showAllTime = !showAllTime;
+        renderAll();
+      });
+
+      // Payment Modal
+      const payModal = document.getElementById('payModal');
+      const payDate = document.getElementById('payDate');
+      const payAmount = document.getElementById('payAmount');
+      const payNote = document.getElementById('payNote');
+
+      document.getElementById('openPayModalBtn').addEventListener('click', () => {
+        payDate.value = getTodayISO();
+        payAmount.value = '';
+        payNote.value = '';
+        payModal.classList.add('show');
+        setTimeout(() => payAmount.focus(), 60);
+      });
+      document.getElementById('closePayModalBtn').addEventListener('click', () => payModal.classList.remove('show'));
+      document.getElementById('savePayBtn').addEventListener('click', () => {
+        const amt = parseFloat(payAmount.value);
+        if (isNaN(amt) || amt <= 0) {
+          showToast('Sahi paise likhein');
+          return;
+        }
+        payments.push({
+          id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          date: payDate.value || getTodayISO(),
+          amount: Number(amt.toFixed(2)),
+          note: payNote.value.trim(),
+          createdAt: Date.now()
+        });
+        persistAll();
+        renderAll();
+        payModal.classList.remove('show');
+        showToast('Jama payment save ho gaya ✅');
+      });
+
+      // Rate Modal
+      const rateModal = document.getElementById('rateModal');
+      const newRateInput = document.getElementById('newRateInput');
+      document.getElementById('openRateBtn').addEventListener('click', () => {
+        newRateInput.value = currentRate;
+        rateModal.classList.add('show');
+        setTimeout(() => newRateInput.focus(), 60);
+      });
+      document.getElementById('closeRateModalBtn').addEventListener('click', () => rateModal.classList.remove('show'));
+      document.getElementById('saveRateBtn').addEventListener('click', () => {
+        const val = parseFloat(newRateInput.value);
+        if (isNaN(val) || val <= 0) {
+          showToast('Sahi rate likhein');
+          return;
+        }
+        currentRate = val;
+        persistAll();
+        updateRateUI();
+        rateModal.classList.remove('show');
+        showToast(`Default Rate ₹${val}/kg set ho gaya ✅`);
+      });
+
+      // Bill Share / Copy / CSV
+      function getVisibleData() {
+        const vy = viewDate.getFullYear();
+        const vm = viewDate.getMonth();
+        const viewYM = `${vy}-${String(vm + 1).padStart(2, '0')}`;
+        const label = showAllTime ? 'POORA HISAB (ALL TIME)' : `${MONTHS_HI[vm].toUpperCase()} ${vy}`;
+        const list = (showAllTime ? entries : entries.filter(e => e.date.startsWith(viewYM)))
+          .slice().sort((a, b) => a.date.localeCompare(b.date));
+        const payList = (showAllTime ? payments : payments.filter(p => p.date.startsWith(viewYM)))
+          .slice().sort((a, b) => a.date.localeCompare(b.date));
+        return { label, list, payList, viewYM };
+      }
+
+      function buildBillText() {
+        const { label, list, payList } = getVisibleData();
+        if (list.length === 0 && payList.length === 0) return null;
+
+        const totalGrams = list.reduce((s, e) => s + e.grams, 0);
+        const totalBill = list.reduce((s, e) => s + e.amount, 0);
+        const totalPaid = payList.reduce((s, p) => s + p.amount, 0);
+        const balance = totalBill - totalPaid;
+
+        const lines = [];
+        lines.push(`🥛 *DUDH HISAB - ${label}*`);
+        lines.push(`------------------------`);
+        list.forEach(e => {
+          const notePart = e.note ? ` (${e.note})` : '';
+          lines.push(`${formatDisplayDate(e.date)} [${e.shift}]: ${formatMilk(e.grams)} × ₹${e.rate} = ${formatMoney(e.amount)}${notePart}`);
+        });
+        lines.push(`------------------------`);
+        lines.push(`*Kul Dudh:* ${formatMilk(totalGrams)}`);
+        lines.push(`*Kul Bill:* ${formatMoney(totalBill)}`);
+        if (totalPaid > 0) {
+          lines.push(`*Jama (Mila Hua):* ${formatMoney(totalPaid)}`);
+          lines.push(`*${balance >= 0 ? 'Baaki Lena Hai' : 'Advance Jama'}:* ${formatMoney(Math.abs(balance))}`);
+        }
+        return lines.join('\n');
+      }
+
+      async function copyText(txt) {
+        try {
+          await navigator.clipboard.writeText(txt);
+          return true;
+        } catch (e) {
+          const ta = document.createElement('textarea');
+          ta.value = txt;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          return true;
+        }
+      }
+
+      document.getElementById('shareWaBtn').addEventListener('click', () => {
+        const txt = buildBillText();
+        if (!txt) { showToast('Share karne ke liye koi entry nahi hai'); return; }
+        window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+      });
+
+      document.getElementById('copyBillBtn').addEventListener('click', async () => {
+        const txt = buildBillText();
+        if (!txt) { showToast('Copy karne ke liye koi entry nahi hai'); return; }
+        await copyText(txt);
+        showToast('Bill copy ho gaya 📋');
+      });
+
+      document.getElementById('exportCsvBtn').addEventListener('click', () => {
+        const { list, viewYM } = getVisibleData();
+        if (list.length === 0) { showToast('Export karne ke liye koi entry nahi hai'); return; }
+        const rows = [['Date', 'Shift', 'Kilograms', 'Grams', 'Rate_Per_Kg', 'Amount_INR', 'Note']];
+        list.forEach(e => {
+          rows.push([
+            formatDisplayDate(e.date),
+            e.shift,
+            (e.grams / 1000).toFixed(3),
+            e.grams,
+            e.rate,
+            e.amount.toFixed(2),
+            `"${String(e.note || '').replace(/"/g, '""')}"`
+          ]);
+        });
+        const csv = '\uFEFF' + rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dudh-hisab-${showAllTime ? 'all' : viewYM}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Excel CSV file download ho gayi 📊');
+      });
+
+      // Backup & Restore (JSON + WhatsApp Code + Merge/Replace)
+      function buildBackupPayload() {
+        return {
+          app: 'Dudh Hisab PWA',
+          version: 3,
+          rate: currentRate,
+          exportedAt: new Date().toISOString(),
+          entries,
+          payments
+        };
+      }
+
+      function markBackupDone() {
+        try { localStorage.setItem(KEY_LAST_BACKUP, String(Date.now())); } catch (e) {}
+        updateBackupBanner();
+      }
+
+      function downloadJsonBackup() {
+        const payload = buildBackupPayload();
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dudh-hisab-backup-${getTodayISO()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        markBackupDone();
+        showToast('Surakshit Backup file save ho gayi 🛡️');
+      }
+
+      document.getElementById('exportJsonBtn').addEventListener('click', downloadJsonBackup);
+      document.getElementById('quickBackupBtn').addEventListener('click', downloadJsonBackup);
+
+      document.getElementById('waBackupBtn').addEventListener('click', async () => {
+        const jsonStr = JSON.stringify(buildBackupPayload());
+        markBackupDone();
+        if (jsonStr.length > 3500) {
+          await copyText(jsonStr);
+          showToast('Data bada hai — Backup Code Copy ho gaya, WhatsApp mein paste karein');
+        } else {
+          window.open('https://wa.me/?text=' + encodeURIComponent(jsonStr), '_blank');
+        }
+      });
+
+      function parseAndPromptRestore(rawText) {
+        try {
+          const text = String(rawText || '').trim();
+          const startIdx = text.indexOf('{');
+          const endIdx = text.lastIndexOf('}');
+          if (startIdx === -1 || endIdx === -1) throw new Error('Invalid JSON');
+          const data = JSON.parse(text.slice(startIdx, endIdx + 1));
+          if (!Array.isArray(data.entries)) throw new Error('No entries array');
+
+          pendingRestoreData = {
+            entries: data.entries.filter(e => e && e.date && typeof e.grams === 'number'),
+            payments: Array.isArray(data.payments) ? data.payments.filter(p => p && p.date && typeof p.amount === 'number') : [],
+            rate: (data.rate && Number(data.rate) > 0) ? Number(data.rate) : null
+          };
+
+          document.getElementById('restorePreviewText').textContent =
+            `Backup mein ${pendingRestoreData.entries.length} dudh entries aur ${pendingRestoreData.payments.length} payment entries mili hain. Merge karne par aapka abhi ka data bhi safe rahega.`;
+          document.getElementById('restoreModeModal').classList.add('show');
+        } catch (err) {
+          showToast('Galat backup file ya code hai ❌');
+        }
+      }
+
+      const importInput = document.getElementById('importFileInput');
+      document.getElementById('importJsonBtn').addEventListener('click', () => importInput.click());
+      importInput.addEventListener('change', (ev) => {
+        const file = ev.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          parseAndPromptRestore(reader.result);
+          importInput.value = '';
+        };
+        reader.readAsText(file);
+      });
+
+      const textRestoreModal = document.getElementById('textRestoreModal');
+      document.getElementById('openTextRestoreBtn').addEventListener('click', () => {
+        document.getElementById('restoreCodeInput').value = '';
+        textRestoreModal.classList.add('show');
+      });
+      document.getElementById('closeTextRestoreBtn').addEventListener('click', () => textRestoreModal.classList.remove('show'));
+      document.getElementById('runTextRestoreBtn').addEventListener('click', () => {
+        const raw = document.getElementById('restoreCodeInput').value;
+        textRestoreModal.classList.remove('show');
+        parseAndPromptRestore(raw);
+      });
+
+      const restoreModeModal = document.getElementById('restoreModeModal');
+      document.getElementById('restoreCancelBtn').addEventListener('click', () => {
+        pendingRestoreData = null;
+        restoreModeModal.classList.remove('show');
+      });
+
+      document.getElementById('restoreMergeBtn').addEventListener('click', () => {
+        if (!pendingRestoreData) return;
+        const existingIds = new Set(entries.map(e => e.id));
+        pendingRestoreData.entries.forEach(e => {
+          if (!existingIds.has(e.id)) {
+            entries.push(e);
+            existingIds.add(e.id);
+          }
+        });
+        const existingPayIds = new Set(payments.map(p => p.id));
+        pendingRestoreData.payments.forEach(p => {
+          if (!existingPayIds.has(p.id)) {
+            payments.push(p);
+            existingPayIds.add(p.id);
+          }
+        });
+        if (pendingRestoreData.rate) currentRate = pendingRestoreData.rate;
+        pendingRestoreData = null;
+        restoreModeModal.classList.remove('show');
+        persistAll();
+        updateRateUI();
+        renderAll();
+        showToast('Backup safely Merge ho gaya ✅');
+      });
+
+      document.getElementById('restoreReplaceBtn').addEventListener('click', () => {
+        if (!pendingRestoreData) return;
+        entries = pendingRestoreData.entries;
+        payments = pendingRestoreData.payments;
+        if (pendingRestoreData.rate) currentRate = pendingRestoreData.rate;
+        pendingRestoreData = null;
+        restoreModeModal.classList.remove('show');
+        persistAll();
+        updateRateUI();
+        renderAll();
+        showToast('Poora Backup Restore ho gaya ✅');
+      });
+
+      // Calculator (Zero operator bugs, post-equals fresh entry)
+      let calcString = '';
+      let justEvaluated = false;
+      const calcExprEl = document.getElementById('calcExpr');
+      const calcValEl = document.getElementById('calcVal');
+      const OPS = ['+', '-', '*', '/'];
+
+      function safeEval(expr) {
+        const cleaned = expr.replace(/[+\-*/.]+$/, '');
+        if (!cleaned || !/^[0-9+\-*/.\s()]+$/.test(cleaned)) return NaN;
+        try {
+          return Function('"use strict"; return (' + cleaned + ')')();
+        } catch (e) {
+          return NaN;
+        }
+      }
+
+      function renderCalc() {
+        calcValEl.textContent = calcString || '0';
+      }
+
+      document.querySelectorAll('.c-btn[data-c]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const v = btn.dataset.c;
+          if (v === 'C') {
+            calcString = '';
+            calcExprEl.textContent = '';
+            justEvaluated = false;
+          } else if (v === 'BACK') {
+            calcString = calcString.slice(0, -1);
+            justEvaluated = false;
+          } else if (v === '=') {
+            if (!calcString) return;
+            const res = safeEval(calcString);
+            if (!isNaN(res) && isFinite(res)) {
+              calcExprEl.textContent = calcString + ' =';
+              calcString = String(Number(res.toFixed(4)));
+              justEvaluated = true;
+            } else {
+              calcExprEl.textContent = 'Error';
+            }
+          } else if (OPS.includes(v)) {
+            if (!calcString && v !== '-') return;
+            if (OPS.includes(calcString.slice(-1))) {
+              calcString = calcString.slice(0, -1) + v;
+            } else {
+              calcString += v;
+            }
+            justEvaluated = false;
+          } else {
+            if (justEvaluated) {
+              calcString = '';
+              calcExprEl.textContent = '';
+              justEvaluated = false;
+            }
+            // Prevent multiple dots in same number segment
+            if (v === '.') {
+              const lastNum = calcString.split(/[+\-*/]/).pop();
+              if (lastNum.includes('.')) return;
+              if (!lastNum) calcString += '0';
+            }
+            calcString += v;
+          }
+          renderCalc();
+        });
+      });
+
+      document.getElementById('calcMulRateBtn').addEventListener('click', () => {
+        const base = calcString ? safeEval(calcString) : 0;
+        if (isNaN(base) || !isFinite(base)) return;
+        const res = base * currentRate;
+        calcExprEl.textContent = `${base} kg × ₹${currentRate} =`;
+        calcString = String(Number(res.toFixed(2)));
+        justEvaluated = true;
+        renderCalc();
+      });
+
+      document.getElementById('calcDivRateBtn').addEventListener('click', () => {
+        const base = calcString ? safeEval(calcString) : 0;
+        if (isNaN(base) || !isFinite(base)) return;
+        const kg = base / currentRate;
+        calcExprEl.textContent = `₹${base} ÷ ₹${currentRate} = ${formatMilk(kg * 1000)}`;
+        calcString = String(Number(kg.toFixed(3)));
+        justEvaluated = true;
+        renderCalc();
+      });
+
+      // Reverse Calculator
+      const reverseRupees = document.getElementById('reverseRupees');
+      const reverseResult = document.getElementById('reverseResult');
+
+      function updateReverseCalc() {
+        const rs = parseFloat(reverseRupees.value);
+        const amount = (!isNaN(rs) && rs > 0) ? rs : 100;
+        const grams = Math.round((amount / currentRate) * 1000);
+        reverseResult.textContent = `₹${amount} mein = ${formatMilk(grams)} (₹${currentRate}/kg par)`;
+      }
+      reverseRupees.addEventListener('input', updateReverseCalc);
+      document.querySelectorAll('.chip[data-rs]').forEach(ch => {
+        ch.addEventListener('click', () => {
+          reverseRupees.value = ch.dataset.rs;
+          updateReverseCalc();
+        });
+      });
+
+      // PWA Service Worker & Install Prompt
+      const statusEl = document.getElementById('offlineStatusText');
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').then(() => {
+            statusEl.textContent = '100% Offline Ready';
+          }).catch(() => {});
+        });
+      }
+
+      const installBanner = document.getElementById('installBanner');
+      const installAppBtn = document.getElementById('installAppBtn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBanner.classList.add('show');
+      });
+
+      installAppBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice.outcome === 'accepted') {
+          installBanner.classList.remove('show');
+          showToast('App install ho raha hai 🎉');
+        }
+        deferredPrompt = null;
+      });
+
+      window.addEventListener('appinstalled', () => {
+        installBanner.classList.remove('show');
+        showToast('Dudh Hisab install ho gaya ✅');
+      });
+
+      // Close modals on backdrop tap
+      document.querySelectorAll('.modal-backdrop').forEach(bd => {
+        bd.addEventListener('click', (e) => {
+          if (e.target === bd) bd.classList.remove('show');
+        });
+      });
+
+      // Boot
+      entryDate.value = getTodayISO();
+      updateDayHint();
+      updateRateUI();
+      renderAll();
+      checkIDBRecovery();
+    })();
+  </script>
+</body>
+</html>
